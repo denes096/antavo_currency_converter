@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Frontend</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+			const baseDomain = "https://backend.antavo.io/"
+
+			$.ajax({
+				type: "get",
+				url: baseDomain + "currencies",
+				success: function (data) {
+					$.each(data, function (k, v) {
+						$('.select').append($('<option></option>').val(v['name']).html(v['name']));
+					})
+				},
+				error: function (data) {
+					console.log(data)
+				}
+			});
+
+			$("#currencyForm").submit(function(e) {
+				if (!isFloat($("#from_val").val())) {
+					alert("Value is not a valid number");
+					return false;
+				}
+				$.ajax({
+					type: "post",
+					data: {
+						from: $("#select_from").val(),
+						to: $("#select_to").val(),
+						fromValue: parseFloat( $("#from_val").val() )
+					},
+					url: baseDomain + "convert",
+					success: function (d) {
+						if (d.success != undefined && !d.success) {
+							$(".result").html(d.message);
+						} else {
+							$(".result").html(d.fromValue + " " + d.from + " = " + d.result + " " + d.to)
+						}
+					},
+					error: function (d) {
+					}
+				});
+
+
+				return false;
+			});
+
+			function isFloat(n) {
+				return parseFloat(n.match(/^-?\d*(\.\d+)?$/))>0;
+			}
+		});
+	</script>
+	<style>
+		div {
+			display: flex;
+			justify-content: center;
+			margin: 15px;
+		}
+		.result {
+			font-size: 26px;
+			font-weight: bold;
+		}
+	</style>
+</head>
+<body>
+	<div>
+		<form id="currencyForm" action="#">
+			<label for="select_from">From:</label>
+			<select class="select" id="select_from"></select>
+			<label for="select_to" style="margin-left: 10px;">To:</label>
+			<select class="select" id="select_to"></select>
+			<label for="from_val" style="margin-left: 10px;">Value:</label>
+			<input type="text" id="from_val">
+			<button style="margin-left: 50px;">Calculate</button>
+		</form>
+	</div>
+	<div class="result"></div>
+</body>
+</html>

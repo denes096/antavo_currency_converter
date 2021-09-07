@@ -1,0 +1,13 @@
+version: "3.2"
+
+services:
+  backend:
+    image: antavo
+    container_name: antavo_module
+    volumes:
+      - ./modules/:/var/www/html/
+    ports:
+      - "80:80"
+      - "443:443"
+    extra_hosts:
+      - "backend.antavo.io:127.0.0.1"
