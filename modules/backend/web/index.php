@@ -12,6 +12,7 @@ $requestString = trim(
 
 // controller name
 $controller = DEFAULT_ROUTE;
+$action = DEFAULT_ROUTE;
 if (!empty(trim($requestString, '/'))) {
 	$urlParams = explode('/', $requestString);
 

@@ -3,6 +3,11 @@
 
 class IndexController
 {
+	public function actionIndex()
+	{
+		return "Have fun!";
+	}
+
 	/**
 	 * @return array available currencies
 	 */
